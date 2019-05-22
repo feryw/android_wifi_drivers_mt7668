@@ -4523,7 +4523,11 @@ VOID kalSchedScanResults(IN P_GLUE_INFO_T prGlueInfo)
 {
 	ASSERT(prGlueInfo);
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,12,0)
+	cfg80211_sched_scan_results(priv_to_wiphy(prGlueInfo),0);
+#else
 	cfg80211_sched_scan_results(priv_to_wiphy(prGlueInfo));
+#endif
 
 }
 

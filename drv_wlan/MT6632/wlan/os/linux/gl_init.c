@@ -955,7 +955,11 @@ VOID wlanSchedScanStoppedWorkQueue(struct work_struct *work)
 
 	/* 2. indication to cfg80211 */
 	/* 20150205 change cfg80211_sched_scan_stopped to work queue due to sched_scan_mtx dead lock issue */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,12,0)
+	cfg80211_sched_scan_stopped(priv_to_wiphy(prGlueInfo),0);
+#else
 	cfg80211_sched_scan_stopped(priv_to_wiphy(prGlueInfo));
+#endif
 	DBGLOG(SCN, INFO,
 	       "cfg80211_sched_scan_stopped event send done WorkQueue thread return from wlanSchedScanStoppedWorkQueue\n");
 	return;
