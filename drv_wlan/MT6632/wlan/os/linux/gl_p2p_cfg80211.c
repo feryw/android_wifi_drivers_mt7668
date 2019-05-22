@@ -286,7 +286,11 @@ static void mtk_vif_destructor(struct net_device *dev)
 #if KERNEL_VERSION(4, 1, 0) <= CFG80211_VERSION_CODE
 struct wireless_dev *mtk_p2p_cfg80211_add_iface(struct wiphy *wiphy,
 						const char *name, unsigned char name_assign_type,
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(4, 12, 0)
 						enum nl80211_iftype type, u32 *flags, struct vif_params *params)
+#else
+						enum nl80211_iftype type, struct vif_params *params)
+#endif
 #else
 struct wireless_dev *mtk_p2p_cfg80211_add_iface(struct wiphy *wiphy,
 						const char *name,
@@ -2615,7 +2619,11 @@ int mtk_p2p_cfg80211_disconnect(struct wiphy *wiphy, struct net_device *dev, u16
 int
 mtk_p2p_cfg80211_change_iface(IN struct wiphy *wiphy,
 			      IN struct net_device *ndev,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 12, 0)
 			      IN enum nl80211_iftype type, IN u32 *flags, IN struct vif_params *params)
+#else
+			      IN enum nl80211_iftype type, IN struct vif_params *params)
+#endif
 {
 	P_GLUE_INFO_T prGlueInfo = (P_GLUE_INFO_T) NULL;
 	INT_32 i4Rslt = -EINVAL;
