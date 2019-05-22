@@ -3488,12 +3488,24 @@ UINT_32 kalGetTxPendingCmdCount(IN P_GLUE_INFO_T prGlueInfo)
 
 /* static struct timer_list tickfn; */
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+static void legacy_timer_emu_func(struct timer_list *t)
+{
+	struct legacy_timer_emu *lt = from_timer(lt, t, t);
+	lt->function(lt->data);
+}
+#endif
+
 VOID kalOsTimerInitialize(IN P_GLUE_INFO_T prGlueInfo, IN PVOID prTimerHandler)
 {
 
 	ASSERT(prGlueInfo);
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+	timer_setup(&(prGlueInfo->tickfn).t, legacy_timer_emu_func, 0);
+#else
 	init_timer(&(prGlueInfo->tickfn));
+#endif
 	prGlueInfo->tickfn.function = prTimerHandler;
 	prGlueInfo->tickfn.data = (unsigned long)prGlueInfo;
 }
@@ -3514,12 +3526,24 @@ BOOLEAN kalSetTimer(IN P_GLUE_INFO_T prGlueInfo, IN UINT_32 u4Interval)
 	ASSERT(prGlueInfo);
 
 	if (HAL_IS_RX_DIRECT(prGlueInfo->prAdapter)) {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+		mod_timer(&(prGlueInfo->tickfn).t, jiffies + u4Interval * HZ / MSEC_PER_SEC);
+#else
 		mod_timer(&prGlueInfo->tickfn, jiffies + u4Interval * HZ / MSEC_PER_SEC);
+#endif
 	} else {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+		del_timer_sync(&(prGlueInfo->tickfn).t);
+		
+		add_timer(&(prGlueInfo->tickfn).t);
+		mod_timer(&(prGlueInfo->tickfn).t, jiffies + u4Interval * HZ / MSEC_PER_SEC);
+//		add_timer(&(prGlueInfo->tickfn).t);
+#else
 		del_timer_sync(&(prGlueInfo->tickfn));
 
 		prGlueInfo->tickfn.expires = jiffies + u4Interval * HZ / MSEC_PER_SEC;
 		add_timer(&(prGlueInfo->tickfn));
+#endif
 	}
 
 	return TRUE;		/* success */
@@ -3541,7 +3565,11 @@ BOOLEAN kalCancelTimer(IN P_GLUE_INFO_T prGlueInfo)
 
 	clear_bit(GLUE_FLAG_TIMEOUT_BIT, &prGlueInfo->ulFlag);
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+	if (del_timer_sync(&(prGlueInfo->tickfn).t) >= 0)
+#else
 	if (del_timer_sync(&(prGlueInfo->tickfn)) >= 0)
+#endif
 		return TRUE;
 	else
 		return FALSE;

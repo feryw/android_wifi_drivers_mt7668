@@ -525,6 +525,14 @@ unsigned int _cfg80211_classify8021d(struct sk_buff *skb)
 }
 #endif
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+static void legacy_timer_emu_func(struct timer_list *t)
+{
+	struct legacy_timer_emu *lt = from_timer(lt, t, t);
+	lt->function(lt->data);
+}
+#endif
+
 #if KERNEL_VERSION(3, 14, 0) <= LINUX_VERSION_CODE
 u16 wlanSelectQueue(struct net_device *dev, struct sk_buff *skb,
 		    void *accel_priv, select_queue_fallback_t fallback)
@@ -2351,13 +2359,23 @@ static INT_32 wlanProbe(PVOID pvData, PVOID pvDriverData)
 			if (!prAdapter->fgTxDirectInited) {
 				skb_queue_head_init(&prAdapter->rTxDirectSkbQueue);
 
-				init_timer(&prAdapter->rTxDirectSkbTimer);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+				timer_setup(&(prAdapter->rTxDirectSkbTimer).t, legacy_timer_emu_func, 0);
 				prAdapter->rTxDirectSkbTimer.data = (unsigned long)prGlueInfo;
 				prAdapter->rTxDirectSkbTimer.function = nicTxDirectTimerCheckSkbQ;
 
-				init_timer(&prAdapter->rTxDirectHifTimer);
+				timer_setup(&(prAdapter->rTxDirectHifTimer).t, legacy_timer_emu_func, 0);
 				prAdapter->rTxDirectHifTimer.data = (unsigned long)prGlueInfo;
 				prAdapter->rTxDirectHifTimer.function = nicTxDirectTimerCheckHifQ;
+#else
+                                init_timer(&prAdapter->rTxDirectSkbTimer);
+                                prAdapter->rTxDirectSkbTimer.data = (unsigned long)prGlueInfo;
+                                prAdapter->rTxDirectSkbTimer.function = nicTxDirectTimerCheckSkbQ;
+
+                                init_timer(&prAdapter->rTxDirectHifTimer);
+                                prAdapter->rTxDirectHifTimer.data = (unsigned long)prGlueInfo;
+                                prAdapter->rTxDirectHifTimer.function = nicTxDirectTimerCheckHifQ;
+#endif
 
 				prAdapter->fgTxDirectInited = TRUE;
 			}
@@ -2722,8 +2740,13 @@ static VOID wlanRemove(VOID)
 
 	if (HAL_IS_TX_DIRECT(prAdapter)) {
 		if (prAdapter->fgTxDirectInited) {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+			del_timer_sync(&(prAdapter->rTxDirectSkbTimer).t);
+			del_timer_sync(&(prAdapter->rTxDirectHifTimer).t);
+#else
 			del_timer_sync(&prAdapter->rTxDirectSkbTimer);
 			del_timer_sync(&prAdapter->rTxDirectHifTimer);
+#endif
 		}
 	}
 

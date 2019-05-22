@@ -547,7 +547,21 @@ struct _GLUE_INFO_T {
 	struct work_struct rTxMsduFreeWork;
 	struct delayed_work rRxPktDeAggWork;
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+ 	struct legacy_timer_emu {
+ 		struct timer_list t;
+ 		void (*function)(unsigned long);
+ 		unsigned long data;
+ 	} _timer;
+#else
+	struct timer_list _timer;
+#endif
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0)
+ 	struct legacy_timer_emu tickfn;
+#else
 	struct timer_list tickfn;
+#endif
 
 #if CFG_SUPPORT_EXT_CONFIG
 	UINT_16 au2ExtCfg[256];	/* NVRAM data buffer */
