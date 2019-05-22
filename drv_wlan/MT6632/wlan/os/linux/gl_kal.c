@@ -4050,8 +4050,13 @@ UINT_32 kalFileRead(struct file *file, unsigned long long offset, unsigned char 
 
 	oldfs = get_fs();
 	set_fs(get_ds());
-
-	ret = vfs_read(file, data, size, &offset);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+		ret = kernel_read(file, data, size, &offset);
+#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0)
+		ret = __vfs_read(file, data, size, &offset);
+#else
+		ret = vfs_read(file, data, size, &offset);
+#endif
 
 	set_fs(oldfs);
 	return ret;
@@ -4065,7 +4070,13 @@ UINT_32 kalFileWrite(struct file *file, unsigned long long offset, unsigned char
 	oldfs = get_fs();
 	set_fs(get_ds());
 
-	ret = vfs_write(file, data, size, &offset);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+		ret = kernel_write(file, data, size, &offset);
+#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0)
+		ret = __vfs_write(file, data, size, &offset);
+#else
+		ret = vfs_write(file, data, size, &offset);
+#endif
 
 	set_fs(oldfs);
 	return ret;
