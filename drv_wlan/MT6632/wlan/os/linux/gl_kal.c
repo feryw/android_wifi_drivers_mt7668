@@ -5097,6 +5097,14 @@ nla_put_failure:
 
 UINT_64 kalGetBootTime(void)
 {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0)
+	struct timespec ts = ktime_to_timespec(ktime_get_boottime());
+	UINT_64 bootTime = 0;
+
+	bootTime = ts.tv_sec;
+	bootTime *= USEC_PER_SEC;
+	bootTime += ts.tv_nsec / NSEC_PER_USEC;
+#else
 	struct timespec ts;
 	UINT_64 bootTime = 0;
 
@@ -5109,6 +5117,7 @@ UINT_64 kalGetBootTime(void)
 	bootTime = ts.tv_sec;
 	bootTime *= USEC_PER_SEC;
 	bootTime += ts.tv_nsec / NSEC_PER_USEC;
+#endif
 	return bootTime;
 }
 
