@@ -4056,7 +4056,11 @@ struct file *kalFileOpen(const char *path, int flags, int rights)
 	int err = 0;
 
 	oldfs = get_fs();
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0)
+	set_fs(KERNEL_DS);
+#else
 	set_fs(get_ds());
+#endif
 	filp = filp_open(path, flags, rights);
 	set_fs(oldfs);
 	if (IS_ERR(filp)) {
@@ -4077,7 +4081,11 @@ UINT_32 kalFileRead(struct file *file, unsigned long long offset, unsigned char 
 	int ret;
 
 	oldfs = get_fs();
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0)
+	set_fs(KERNEL_DS);
+#else
 	set_fs(get_ds());
+#endif
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
 		ret = kernel_read(file, data, size, &offset);
 #elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0)
@@ -4096,7 +4104,11 @@ UINT_32 kalFileWrite(struct file *file, unsigned long long offset, unsigned char
 	int ret;
 
 	oldfs = get_fs();
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0)
+	set_fs(KERNEL_DS);
+#else
 	set_fs(get_ds());
+#endif
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
 		ret = kernel_write(file, data, size, &offset);
