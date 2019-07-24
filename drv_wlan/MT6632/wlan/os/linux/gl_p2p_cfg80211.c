@@ -383,7 +383,7 @@ struct wireless_dev *mtk_p2p_cfg80211_add_iface(struct wiphy *wiphy,
 		if (prNewNetDevice->ieee80211_ptr)
 			prNewNetDevice->ieee80211_ptr->iftype = type;
 		/* register destructor function for virtual interface */
-		prNewNetDevice->destructor = mtk_vif_destructor;
+		prNewNetDevice->priv_destructor = mtk_vif_destructor;
 
 		gprP2pRoleWdev[u4Idx] = prWdev;
 		/*prP2pInfo->prRoleWdev[0] = prWdev;*//* TH3 multiple P2P */
