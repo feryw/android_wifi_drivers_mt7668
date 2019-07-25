@@ -134,7 +134,11 @@
 #endif
 
 #ifdef CONFIG_HAS_WAKELOCK
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 0, 0)
+#include <linux/device.h>
+#else
 #include <linux/wakelock.h>
+#endif
 #endif
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 12)
