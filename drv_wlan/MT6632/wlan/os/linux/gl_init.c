@@ -533,7 +533,13 @@ static void legacy_timer_emu_func(struct timer_list *t)
 }
 #endif
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 19, 0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 2, 0)
+u16 wlanSelectQueue(struct net_device *dev, struct sk_buff *skb,
+		    struct net_device *sb_dev)
+{
+	return mtk_wlan_ndev_select_queue(skb);
+}
+#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 19, 0)
 u16 wlanSelectQueue(struct net_device *dev, struct sk_buff *skb,
 		    struct net_device *sb_dev, select_queue_fallback_t fallback)
 {
