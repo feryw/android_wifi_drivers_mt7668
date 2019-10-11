@@ -7595,6 +7595,7 @@ textresume:
 					x++;
 					continue;
 				}
+				__attribute__ ((fallthrough));/* FALL THRU */
 			case '\n':
 				/* \ <lf> -> line continuation */
 				x++;
