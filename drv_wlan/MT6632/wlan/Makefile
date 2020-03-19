@@ -21,6 +21,14 @@ ccflags-y += -DCFG_SUPPORT_TSF_USING_BOOTTIME=1
 ccflags-y:=$(filter-out -U$(WLAN_CHIP_ID),$(ccflags-y))
 ccflags-y += -DLINUX -D$(WLAN_CHIP_ID)
 
+# Support to change sta, p2p, ap interface names
+# yes: enable, no: disable
+# eg. insmod wlan_mt76x8_sdio.ko sta=wlan p2p=p2p ap=ap
+CFG_DRIVER_INF_NAME_CHANGE = yes
+ifeq ($(CFG_DRIVER_INF_NAME_CHANGE), yes)
+PLATFORM_FLAGS += -DCFG_DRIVER_INF_NAME_CHANGE
+endif
+
 CONFIG_MTK_WIFI_MCC_SUPPORT=y
 ifeq ($(CONFIG_MTK_WIFI_MCC_SUPPORT), y)
     ccflags-y += -DCFG_SUPPORT_CHNL_CONFLICT_REVISE=0
