@@ -2706,10 +2706,6 @@ p2pFuncParseBeaconContent(IN P_ADAPTER_T prAdapter,
 						break;
 					}
 				}
-				DBGLOG(RSN, ERROR, "bcn mfpc:%d, mfpr:%d, sha256:%d\n",
-					prP2pBssInfo->rApPmfCfg.fgMfpc,
-					prP2pBssInfo->rApPmfCfg.fgMfpr,
-					prP2pBssInfo->rApPmfCfg.fgSha256);
 #endif
 
 				break;

@@ -1948,7 +1948,6 @@ nicUpdateBeaconIETemplate(IN P_ADAPTER_T prAdapter,
 	}
 	/* increase command sequence number */
 	ucCmdSeqNum = nicIncreaseCmdSeqNum(prAdapter);
-	DBGLOG(REQ, TRACE, "ucCmdSeqNum =%d\n", ucCmdSeqNum);
 
 	/* Setup common CMD Info Packet */
 	prCmdInfo->eCmdType = COMMAND_TYPE_NETWORK_IOCTL;
