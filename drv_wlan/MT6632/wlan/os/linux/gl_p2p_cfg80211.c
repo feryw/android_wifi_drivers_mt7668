@@ -2756,7 +2756,11 @@ mtk_p2p_cfg80211_set_bitrate_mask(IN struct wiphy *wiphy,
 }				/* mtk_p2p_cfg80211_set_bitrate_mask */
 
 void mtk_p2p_cfg80211_mgmt_frame_register(IN struct wiphy *wiphy,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
+					  struct wireless_dev *wdev, struct mgmt_frame_regs *upd)
+#else
 					  struct wireless_dev *wdev, IN u16 frame_type, IN bool reg)
+#endif
 {
 #if 0
 	P_MSG_P2P_MGMT_FRAME_REGISTER_T prMgmtFrameRegister = (P_MSG_P2P_MGMT_FRAME_REGISTER_T) NULL;
@@ -2765,6 +2769,10 @@ void mtk_p2p_cfg80211_mgmt_frame_register(IN struct wiphy *wiphy,
 	UINT_8 ucRoleIdx = 0;
 	PUINT_32 pu4P2pPacketFilter = NULL;
 	P_P2P_ROLE_FSM_INFO_T prP2pRoleFsmInfo = (P_P2P_ROLE_FSM_INFO_T) NULL;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
+	IN u16 frame_type = BIT(upd->global_stypes << 4);
+	IN bool reg = false;
+#endif
 
 	do {
 		if ((wiphy == NULL) || (wdev == NULL))
