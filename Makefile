@@ -17,4 +17,10 @@ else
     PWD  := $(shell pwd)
 default:
 	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules
+
+clean: driver_clean
+
+driver_clean:
+	$(MAKE) -C $(KERNELDIR) M=$(PWD) clean
+
 endif
