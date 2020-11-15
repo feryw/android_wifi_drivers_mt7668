@@ -13,7 +13,8 @@ ifneq ($(KERNELRELEASE),)
 # Otherwise we were called directly from the command
 # line; invoke the kernel build system.
 else
-    KERNELDIR ?= /lib/modules/$(shell uname -r)/build
+    KSRC ?= /lib/modules/$(shell uname -r)/build
+    KERNELDIR := $(KSRC)
     PWD  := $(shell pwd)
 default:
 	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules
