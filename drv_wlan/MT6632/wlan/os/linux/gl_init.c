@@ -2421,24 +2421,20 @@ static INT_32 wlanProbe(PVOID pvData, PVOID pvDriverData)
 		/* TODO the change schedule API shall be provided by OS glue layer */
 		/* Switch the Wi-Fi task priority to higher priority and change the scheduling method */
 		if (prGlueInfo->prAdapter->rWifiVar.ucThreadPriority > 0) {
-			struct sched_param param = {.sched_priority = prGlueInfo->prAdapter->rWifiVar.ucThreadPriority
-			};
 			if (prGlueInfo->main_thread == NULL || &(prGlueInfo->main_thread->static_prio) < (int *)prGlueInfo->main_thread) {
                                 return -1;//fix wifi hang system when reboot
                         }
-			sched_setscheduler(prGlueInfo->main_thread,
-					   prGlueInfo->prAdapter->rWifiVar.ucThreadScheduling, &param);
+			sched_set_fifo_low(prGlueInfo->main_thread);
 #if CFG_SUPPORT_MULTITHREAD
                         if (prGlueInfo->hif_thread == NULL || &(prGlueInfo->hif_thread->static_prio) < (int *)prGlueInfo->hif_thread) {
                                 return -1;//fix wifi hang system when reboot
                         }
-			sched_setscheduler(prGlueInfo->hif_thread,
-					   prGlueInfo->prAdapter->rWifiVar.ucThreadScheduling, &param);
+			sched_set_fifo_low(prGlueInfo->hif_thread);
                         if (prGlueInfo->rx_thread == NULL || &(prGlueInfo->rx_thread->static_prio) < (int *)prGlueInfo->rx_thread) {
                                 return -1;//fix wifi hang system when reboot
                         }
-			sched_setscheduler(prGlueInfo->rx_thread,
-					   prGlueInfo->prAdapter->rWifiVar.ucThreadScheduling, &param);
+
+			sched_set_fifo_low(prGlueInfo->rx_thread);
 #endif
 			DBGLOG(INIT, INFO,
 			       "Set pri = %d, sched = %d\n",
