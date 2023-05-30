@@ -8655,7 +8655,8 @@ unsigned long kal_kallsyms_lookup_name(const char *name)
 {
 	unsigned long ret = 0;
 
-	ret = kallsyms_lookup_name(name);
+	//ret = kallsyms_lookup_name(name);
+	ret = 0; //kallsyms_lookup_name  not defined
 	if (ret) {
 #ifdef CONFIG_ARM
 #ifdef CONFIG_THUMB2_KERNEL

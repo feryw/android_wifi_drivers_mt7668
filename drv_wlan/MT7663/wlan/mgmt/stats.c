@@ -142,7 +142,7 @@ void StatsEnvRxTime2Host(IN struct ADAPTER *prAdapter, struct sk_buff *prSkb)
 #else
 	struct timeval tval;
 #endif
-	struct rtc_time tm;
+//	struct rtc_time tm;
 
 	if ((g_ucTxRxFlag & BIT(1)) == 0)
 		return;
@@ -169,7 +169,7 @@ void StatsEnvRxTime2Host(IN struct ADAPTER *prAdapter, struct sk_buff *prSkb)
 #else
 	do_gettimeofday(&tval);
 #endif
-	rtc_time_to_tm(tval.tv_sec, &tm);
+//	rtc_time_to_tm(tval.tv_sec, &tm);
 
 	switch (ucIpProto) {
 	case IP_PRO_TCP:
@@ -185,6 +185,7 @@ void StatsEnvRxTime2Host(IN struct ADAPTER *prAdapter, struct sk_buff *prSkb)
 			u4NoDelayRx++;
 			break;
 		}
+/*
 		DBGLOG(RX, INFO,
 	"IPID 0x%04x src %d dst %d UP %d,delay %u us,int2rx %lu us,IntTime %llu,%u/%u,leave at %02d:%02d:%02d.%06ld\n",
 			u2IPID, u2UdpSrcPort, u2UdpDstPort,
@@ -197,6 +198,7 @@ void StatsEnvRxTime2Host(IN struct ADAPTER *prAdapter, struct sk_buff *prSkb)
 #else
 			tm.tm_hour, tm.tm_min, tm.tm_sec, tval.tv_usec);
 #endif
+*/
 		break;
 	default:
 		break;
