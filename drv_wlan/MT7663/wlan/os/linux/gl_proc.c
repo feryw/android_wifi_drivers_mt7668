@@ -82,6 +82,7 @@
  *                              C O N S T A N T S
  *******************************************************************************
  */
+#define file_operations  proc_ops
 #define PROC_MCR_ACCESS                         "mcr"
 #define PROC_ROOT_NAME							"wlan"
 
@@ -1850,51 +1851,51 @@ static ssize_t procDisconnInfoRead(struct file *filp,
 
 
 static const struct file_operations dbglevel_ops = {
-	.owner = THIS_MODULE,
-	.read = procDbgLevelRead,
-	.write = procDbgLevelWrite,
+//	.owner = THIS_MODULE,
+	.proc_read = procDbgLevelRead,
+	.proc_write = procDbgLevelWrite,
 };
 
 #if WLAN_INCLUDE_PROC
 #if	CFG_SUPPORT_EASY_DEBUG
 
 static const struct file_operations efusedump_ops = {
-	.owner = THIS_MODULE,
-	.open = procEfuseDumpOpen,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = seq_release,
+//	.owner = THIS_MODULE,
+	.proc_open = procEfuseDumpOpen,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = seq_release,
 };
 
 static const struct file_operations drivercmd_ops = {
-	.owner = THIS_MODULE,
-	.read = procDriverCmdRead,
-	.write = procDriverCmdWrite,
+//	.owner = THIS_MODULE,
+	.proc_read = procDriverCmdRead,
+	.proc_write = procDriverCmdWrite,
 };
 
 static const struct file_operations cfg_ops = {
-	.owner = THIS_MODULE,
-	.read = procCfgRead,
-	.write = procCfgWrite,
+//	.owner = THIS_MODULE,
+	.proc_read = procCfgRead,
+	.proc_write = procCfgWrite,
 };
 #endif
 #endif
 static const struct file_operations get_txpwr_tbl_ops = {
-	.owner	 = THIS_MODULE,
-	.read = procGetTxpwrTblRead,
+//	.owner	 = THIS_MODULE,
+	.proc_read = procGetTxpwrTblRead,
 };
 
 #ifdef CFG_GET_TEMPURATURE
 static const struct file_operations get_temperature_ops = {
-	.owner	 = THIS_MODULE,
-	.read = proc_get_temperature,
+//	.owner	 = THIS_MODULE,
+	.proc_read = proc_get_temperature,
 };
 #endif
 
 #if CFG_DISCONN_DEBUG_FEATURE
 static const struct file_operations disconn_info_ops = {
-	.owner = THIS_MODULE,
-	.read = procDisconnInfoRead,
+//	.owner = THIS_MODULE,
+	.proc_read = procDisconnInfoRead,
 };
 #endif
 
@@ -2027,9 +2028,9 @@ static ssize_t procMCRWrite(struct file *file, const char __user *buffer,
 }				/* end of procMCRWrite() */
 
 static const struct file_operations mcr_ops = {
-	.owner = THIS_MODULE,
-	.read = procMCRRead,
-	.write = procMCRWrite,
+//	.owner = THIS_MODULE,
+	.proc_read = procMCRRead,
+	.proc_write = procMCRWrite,
 };
 
 #if CFG_SUPPORT_SET_CAM_BY_PROC
@@ -2097,8 +2098,8 @@ static ssize_t procSetCamCfgWrite(struct file *file, const char __user *buffer,
 }
 
 static const struct file_operations proc_set_cam_ops = {
-	.owner = THIS_MODULE,
-	.write = procSetCamCfgWrite,
+//	.owner = THIS_MODULE,
+	.proc_write = procSetCamCfgWrite,
 };
 #endif /*CFG_SUPPORT_SET_CAM_BY_PROC */
 
@@ -2231,9 +2232,9 @@ static ssize_t procPktDelayDbgCfgWrite(struct file *file, const char *buffer,
 }
 
 static const struct file_operations proc_pkt_delay_dbg_ops = {
-	.owner = THIS_MODULE,
-	.read = procPktDelayDbgCfgRead,
-	.write = procPktDelayDbgCfgWrite,
+//	.owner = THIS_MODULE,
+	.proc_read = procPktDelayDbgCfgRead,
+	.proc_write = procPktDelayDbgCfgWrite,
 };
 
 #if CFG_SUPPORT_DEBUG_FS
@@ -2303,9 +2304,9 @@ static ssize_t procRoamWrite(struct file *file, const char __user *buffer,
 }
 
 static const struct file_operations roam_ops = {
-	.owner = THIS_MODULE,
-	.read = procRoamRead,
-	.write = procRoamWrite,
+//	.owner = THIS_MODULE,
+	.proc_read = procRoamRead,
+	.proc_write = procRoamWrite,
 };
 #endif
 
@@ -2366,9 +2367,9 @@ static ssize_t procCountryWrite(struct file *file, const char __user *buffer,
 }
 
 static const struct file_operations country_ops = {
-	.owner = THIS_MODULE,
-	.read = procCountryRead,
-	.write = procCountryWrite,
+//	.owner = THIS_MODULE,
+	.proc_read = procCountryRead,
+	.proc_write = procCountryWrite,
 };
 
 static ssize_t procAutoPerfCfgRead(struct file *filp, char __user *buf,
@@ -2455,9 +2456,9 @@ static ssize_t procAutoPerfCfgWrite(struct file *file, const char *buffer,
 }
 
 static const struct file_operations auto_perf_ops = {
-	.owner = THIS_MODULE,
-	.read = procAutoPerfCfgRead,
-	.write = procAutoPerfCfgWrite,
+//	.owner = THIS_MODULE,
+	.proc_read = procAutoPerfCfgRead,
+	.proc_write = procAutoPerfCfgWrite,
 };
 
 
@@ -3011,9 +3012,9 @@ static ssize_t cfgWrite(struct file *filp, const char __user *buf,
 }
 
 static const struct file_operations fwcfg_ops = {
-	.owner = THIS_MODULE,
-	.read = cfgRead,
-	.write = cfgWrite,
+//	.owner = THIS_MODULE,
+	.proc_read = cfgRead,
+	.proc_write = cfgWrite,
 };
 
 int32_t cfgRemoveProcEntry(void)

@@ -7204,6 +7204,7 @@ int mtk_cfg_mgmt_tx(struct wiphy *wiphy,
 #endif
 }
 
+/*
 void mtk_cfg_mgmt_frame_register(struct wiphy *wiphy,
 				 struct wireless_dev *wdev,
 				 u16 frame_type, bool reg)
@@ -7227,6 +7228,7 @@ void mtk_cfg_mgmt_frame_register(struct wiphy *wiphy,
 						 reg);
 	}
 }
+*/
 
 #ifdef CONFIG_NL80211_TESTMODE
 #if KERNEL_VERSION(3, 12, 0) <= CFG80211_VERSION_CODE

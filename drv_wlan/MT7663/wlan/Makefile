@@ -3,7 +3,7 @@
 ##############################################################
 # Common settings
 ##############################################################
-export MTK_COMBO_CHIP=MT7663
+export MTK_COMBO_CHIP=MT7668
 export HIF=sdio
 export CONFIG_MTK_WIFI_ONLY=m
 export CONFIG_MTK_COMBO=m
@@ -14,7 +14,7 @@ export CONFIG_MTK_COMBO_COMM_SDIO=m
 export CONFIG_MT_WIFI_CHRDEV=m
 export MTK_CPU_SCHED=n
 
-WIFI_TARGET := mt7663
+WIFI_TARGET := mt7668
 
 PWD=$(shell pwd)
 DRIVER_DIR=$(PWD)
@@ -29,8 +29,8 @@ export CONFIG_MTK_PREALLOC_MEMORY=n
 export CONFIG_SDIO_AGG_THREAD=n
 export CONFIG_MTK_TPENHANCE_MODE=y
 
-KSRC ?= /usr/src/linux-headers-5.4.124-0504124-generic/
-#    KSRC ?= /lib/modules/$(shell uname -r)/build
+#KSRC ?= /usr/src/linux-headers-5.4.124-0504124-generic/
+    KSRC ?= /lib/modules/$(shell uname -r)/build
     KERNELDIR := $(KSRC)
 
 
