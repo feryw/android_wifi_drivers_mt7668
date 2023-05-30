@@ -10738,10 +10738,12 @@ out:
 inline uint64_t wlanTpeTimeUs(void)
 {
 
-	struct timeval _now;
-	do_gettimeofday(&_now);
+//	struct timeval _now;
+//	do_gettimeofday(&_now);
 
-	return (uint64_t)((int)_now.tv_sec * 1000000 + (int)_now.tv_usec);
+//	return (uint64_t)((int)_now.tv_sec * 1000000 + (int)_now.tv_usec);
+
+	return (uint64_t)ktime_to_us(ktime_get_boottime());
 }
 
 void wlanTpeUpdate(struct GLUE_INFO *prGlueInfo, struct QUE *prSrcQue,
