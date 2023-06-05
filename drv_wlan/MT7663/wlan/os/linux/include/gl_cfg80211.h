@@ -339,7 +339,11 @@ int mtk_cfg80211_mgmt_tx(struct wiphy *wiphy,
 #endif
 
 void mtk_cfg80211_mgmt_frame_register(IN struct wiphy *wiphy,
-		IN struct wireless_dev *wdev, IN u16 frame_type, IN bool reg);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
+				      IN struct wireless_dev *wdev, struct mgmt_frame_regs *upd);
+#else
+				      IN struct wireless_dev *wdev, IN u16 frame_type, IN bool reg);
+#endif
 
 int mtk_cfg80211_mgmt_tx_cancel_wait(struct wiphy *wiphy,
 				     struct wireless_dev *wdev, u64 cookie);

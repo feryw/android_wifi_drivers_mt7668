@@ -29,6 +29,11 @@ export CONFIG_MTK_PREALLOC_MEMORY=n
 export CONFIG_SDIO_AGG_THREAD=n
 export CONFIG_MTK_TPENHANCE_MODE=y
 
+KSRC ?= /usr/src/linux-headers-5.4.124-0504124-generic/
+#    KSRC ?= /lib/modules/$(shell uname -r)/build
+    KERNELDIR := $(KSRC)
+
+
 # ---------------------------------------------------
 # ALPS Setting
 # ---------------------------------------------------
@@ -428,10 +433,10 @@ ifeq ($(MODULE_NAME),)
 	MODULE_NAME := wlan_$(shell echo $(strip $(WLAN_CHIP_ID)) | tr A-Z a-z)_$(CONFIG_MTK_COMBO_WIFI_HIF)
 endif
 
-ifndef CONFIG_KASAN
-KBUILD_CFLAGS_MODULE += -Wlarger-than=40000 \
- -Wframe-larger-than=1024
-endif
+#ifndef CONFIG_KASAN
+#KBUILD_CFLAGS_MODULE += -Wlarger-than=40000 \
+# -Wframe-larger-than=1024
+#endif
 
 src = $(KERNEL_SRC)/$(M)
 
@@ -474,20 +479,9 @@ ifneq ($(PLATFORM_FLAGS), )
     ccflags-y += $(PLATFORM_FLAGS)
 endif
 
-ifeq ($(CONFIG_MTK_WIFI_ONLY),$(filter $(CONFIG_MTK_WIFI_ONLY),m y))
-obj-$(CONFIG_MTK_WIFI_ONLY) += $(MODULE_NAME).o
-else
-obj-$(CONFIG_MTK_COMBO_WIFI) += $(MODULE_NAME).o
-#obj-y += $(MODULE_NAME).o
-endif
 
-ifeq ($(CONFIG_WLAN_DRV_BUILD_IN),y)
-$(warning $(MODULE_NAME) build-in boot.img)
-obj-y += $(MODULE_NAME).o
-else
-$(warning $(MODULE_NAME) is kernel module)
 obj-m += $(MODULE_NAME).o
-endif
+
 
 # ---------------------------------------------------
 # Directory List
@@ -696,6 +690,7 @@ $(MODULE_NAME_PREALLOC)-objs += $(PREALLOC_OBJS)
 obj-m += $(MODULE_NAME_PREALLOC).o
 endif
 
+obj-m += $(MODULE_NAME).o
 
 ##############################################################
 # Compile settings
@@ -707,7 +702,7 @@ modules:
 	@echo cross_comple = $(CROSS_COMPILE)
 	@echo CFLAGS = $(CFLAGS)
 	@echo EXTRA_CFLAGS = $(EXTRA_CFLAGS)
-	$(MAKE) -C $(KERNEL_SRC) M=$(M) MODULE_NAME=$(MODULE_NAME) PLATFORM_FLAGS="$(PLATFORM_FLAGS)" modules
+	$(MAKE) -C $(KSRC) M=$(PWD) MODULE_NAME=$(MODULE_NAME) PLATFORM_FLAGS="$(PLATFORM_FLAGS)" modules
 
 modules_install:
 	@$(MAKE) INSTALL_MOD_STRIP=1 M=$(M) -C $(KERNEL_SRC) modules_install
@@ -715,8 +710,13 @@ modules_install:
 	cd ${OUT_DIR}/$(M)/; find -name $(MODULE_NAME).ko -exec cp {} ${OUT_DIR}/../vendor_lib/modules/$(MODULE_NAME).ko \;
 
 
+clean:
+	@echo cross_comple = $(CROSS_COMPILE)
+	@echo CFLAGS = $(CFLAGS)
+	@echo EXTRA_CFLAGS = $(EXTRA_CFLAGS)
+	$(MAKE) -C $(KSRC) M=$(PWD) MODULE_NAME=$(MODULE_NAME) PLATFORM_FLAGS="$(PLATFORM_FLAGS)" clean
+
+
 .PHONY: all modules modules_install
-
-
 
 
