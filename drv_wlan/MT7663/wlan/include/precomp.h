@@ -78,6 +78,12 @@
  *                    E X T E R N A L   R E F E R E N C E S
  *******************************************************************************
  */
+
+#include <linux/sched.h>
+#include <linux/sched/clock.h>
+#include <linux/sched/task.h>
+#include <linux/sched/mm.h>
+
 #include "hif_cmm.h"
 #include "gl_os.h"		/* Include "config.h" */
 

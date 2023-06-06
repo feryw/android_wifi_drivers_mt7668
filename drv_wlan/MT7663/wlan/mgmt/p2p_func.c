@@ -1958,7 +1958,7 @@ void p2pFuncDfsSwitchCh(IN struct ADAPTER *prAdapter,
 			DBGLOG(P2P, INFO, "p2pFuncDfsSwitchCh: Update to OS\n");
 			cfg80211_ch_switch_notify(
 				prP2PInfo->prDevHandler,
-				prP2PInfo->chandef);
+				prP2PInfo->chandef,               0,0        );
 			DBGLOG(P2P, INFO,
 				"p2pFuncDfsSwitchCh: Update to OS Done\n");
 		} else
