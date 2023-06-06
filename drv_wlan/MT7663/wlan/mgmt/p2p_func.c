@@ -1958,7 +1958,13 @@ void p2pFuncDfsSwitchCh(IN struct ADAPTER *prAdapter,
 			DBGLOG(P2P, INFO, "p2pFuncDfsSwitchCh: Update to OS\n");
 			cfg80211_ch_switch_notify(
 				prP2PInfo->prDevHandler,
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0)
 				prP2PInfo->chandef,               0,0        );
+#elif LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
+				prP2PInfo->chandef,               0        );
+#else
+				prP2PInfo->chandef);
+#endif
 			DBGLOG(P2P, INFO,
 				"p2pFuncDfsSwitchCh: Update to OS Done\n");
 		} else
