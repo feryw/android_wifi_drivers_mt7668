@@ -6436,7 +6436,7 @@ int mtk_cfg_change_iface(struct wiphy *wiphy,
 }
 
 int mtk_cfg_add_key(struct wiphy *wiphy,
-		    struct net_device *ndev, u8 key_index,
+		    struct net_device *ndev, int link_id, u8 key_index,
 		    bool pairwise, const u8 *mac_addr,
 		    struct key_params *params)
 {
@@ -6461,7 +6461,7 @@ int mtk_cfg_add_key(struct wiphy *wiphy,
 }
 
 int mtk_cfg_get_key(struct wiphy *wiphy,
-		    struct net_device *ndev, u8 key_index,
+		    struct net_device *ndev, int link_id, u8 key_index,
 		    bool pairwise, const u8 *mac_addr, void *cookie,
 		    void (*callback)(void *cookie, struct key_params *))
 {
@@ -6485,7 +6485,7 @@ int mtk_cfg_get_key(struct wiphy *wiphy,
 }
 
 int mtk_cfg_del_key(struct wiphy *wiphy,
-		    struct net_device *ndev, u8 key_index,
+		    struct net_device *ndev, int link_id, u8 key_index,
 		    bool pairwise, const u8 *mac_addr)
 {
 	struct GLUE_INFO *prGlueInfo = NULL;
@@ -6508,7 +6508,7 @@ int mtk_cfg_del_key(struct wiphy *wiphy,
 }
 
 int mtk_cfg_set_default_key(struct wiphy *wiphy,
-			    struct net_device *ndev,
+			    struct net_device *ndev, int link_id,
 			    u8 key_index, bool unicast, bool multicast)
 {
 	struct GLUE_INFO *prGlueInfo = NULL;
@@ -6531,7 +6531,7 @@ int mtk_cfg_set_default_key(struct wiphy *wiphy,
 }
 
 int mtk_cfg_set_default_mgmt_key(struct wiphy *wiphy,
-		struct net_device *ndev, u8 key_index)
+		struct net_device *ndev, int link_id, u8 key_index)
 {
 	struct GLUE_INFO *prGlueInfo = NULL;
 	uint8_t state = 0;
@@ -7402,7 +7402,7 @@ int mtk_cfg_change_beacon(struct wiphy *wiphy,
 }
 
 int mtk_cfg_stop_ap(struct wiphy *wiphy,
-		    struct net_device *dev)
+		    struct net_device *dev, unsigned int link_id)
 {
 	struct GLUE_INFO *prGlueInfo = NULL;
 	uint8_t state = 0;
@@ -7440,7 +7440,7 @@ int mtk_cfg_set_wiphy_params(struct wiphy *wiphy,
 }
 
 int mtk_cfg_set_bitrate_mask(struct wiphy *wiphy,
-			     struct net_device *dev,
+			     struct net_device *dev, unsigned int link_id,
 			     const u8 *peer,
 			     const struct cfg80211_bitrate_mask *mask)
 {

@@ -70,6 +70,11 @@
 #include "precomp.h"
 #include "mgmt/ais_fsm.h"
 
+#include <linux/sched.h>
+#include <linux/sched/clock.h>
+#include <linux/sched/task.h>
+#include <linux/sched/mm.h>
+
 /*******************************************************************************
  *                              C O N S T A N T S
  *******************************************************************************

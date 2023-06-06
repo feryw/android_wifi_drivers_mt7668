@@ -87,6 +87,11 @@
 #include <linux/ctype.h>
 #endif
 
+#include <linux/sched.h>
+#include <linux/sched/clock.h>
+#include <linux/sched/task.h>
+#include <linux/sched/mm.h>
+
 /*******************************************************************************
  *                              C O N S T A N T S
  *******************************************************************************
@@ -96,6 +101,8 @@
 
 /* the maximum number of all possible file name */
 #define FILE_NAME_TOTAL 8
+
+#define netif_rx_ni netif_rx
 
 /*******************************************************************************
  *                             D A T A   T Y P E S
@@ -1370,7 +1377,7 @@ kalIndicateStatusAndComplete(IN struct GLUE_INFO
 			/* CFG80211 Indication */
 			if (eStatus == WLAN_STATUS_ROAM_OUT_FIND_BEST) {
 #if KERNEL_VERSION(4, 12, 0) <= CFG80211_VERSION_CODE
-				rRoamInfo.bss = bss;
+				rRoamInfo.links[0].bss = bss;
 				rRoamInfo.req_ie = prGlueInfo->aucReqIe;
 				rRoamInfo.req_ie_len =
 				prGlueInfo->u4ReqIeLength;
@@ -2657,8 +2664,8 @@ static int32_t kalThreadSchedRetrieve(struct task_struct *pThread,
 
 	pSched->time = sec*1000 + usec/1000;
 	pSched->exec = se.sum_exec_runtime;
-	pSched->runnable = se.statistics.wait_sum;
-	pSched->iowait = se.statistics.iowait_sum;
+	pSched->runnable = pThread->stats.wait_sum;
+	pSched->iowait = pThread->stats.iowait_sum;
 
 	return 0;
 #else
@@ -8225,7 +8232,7 @@ void kalIndicateChannelSwitch(IN struct GLUE_INFO *prGlueInfo,
 	DBGLOG(REQ, STATE, "DFS channel switch to %d\n", ucChannelNum);
 
 	cfg80211_chandef_create(&chandef, prChannel, rChannelType);
-	cfg80211_ch_switch_notify(prGlueInfo->prDevHandler, &chandef);
+	cfg80211_ch_switch_notify(prGlueInfo->prDevHandler, &chandef,             0,0         );
 }
 #endif
 

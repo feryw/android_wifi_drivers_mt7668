@@ -2246,7 +2246,7 @@ uint32_t saaFsmRunEventRxDisassoc(IN struct ADAPTER *prAdapter,
 					DBGLOG(SAA, INFO,
 						"notification of RX disassociation %d\n",
 						prSwRfb->u2PacketLen);
-					if (wdev->current_bss)
+					if (wdev->connected)
 					kalIndicateRxDisassocToUpperLayer(
 						prGlueInfo->prDevHandler,
 						(uint8_t *)prDisassocFrame,
@@ -2283,7 +2283,7 @@ uint32_t saaFsmRunEventRxDisassoc(IN struct ADAPTER *prAdapter,
 			wdev = prAdapter->prGlueInfo->prP2PInfo[ucRoleIdx]
 						->aprRoleHandler->ieee80211_ptr;
 
-			if (wdev->current_bss)
+			if (wdev->connected)
 				kalIndicateRxDisassocToUpperLayer(
 					prGlueInfo->prP2PInfo[ucRoleIdx]
 					->aprRoleHandler,
@@ -2315,7 +2315,7 @@ uint32_t saaFsmRunEventRxDisassoc(IN struct ADAPTER *prAdapter,
 			DBGLOG(SAA, INFO,
 				"notification of RX disassociation %d\n",
 				prSwRfb->u2PacketLen);
-			if (wdev->current_bss)
+			if (wdev->connected)
 				cfg80211_rx_mlme_mgmt(
 					prAdapter->prGlueInfo->prDevHandler,
 					(uint8_t *)prDisassocFrame,

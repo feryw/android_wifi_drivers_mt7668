@@ -1,5 +1,10 @@
 #include "precomp.h"
 
+#include <linux/sched.h>
+#include <linux/sched/clock.h>
+#include <linux/sched/task.h>
+#include <linux/sched/mm.h>
+
 #if (CFG_SUPPORT_TRACE_TC4 == 1)
 struct COMMAND {
 	uint8_t ucCID;
