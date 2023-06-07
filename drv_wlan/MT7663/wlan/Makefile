@@ -438,7 +438,7 @@ endif
 # -Wframe-larger-than=1024
 #endif
 
-src = $(KERNEL_SRC)/$(M)
+#src = $(KERNEL_SRC)/$(M)
 
 ccflags-y += -DDBG=0
 #ccflags-y += -Wunused-function
